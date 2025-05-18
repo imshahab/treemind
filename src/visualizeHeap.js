@@ -122,6 +122,11 @@ const cy = cytoscape({
 	},
 })
 
+// lock all nodes to prevent dragging
+cy.nodes().forEach((node) => {
+	node.lock()
+})
+
 // highlight path and show tooltip on hover
 cy.on('mouseover', 'node', (evt) => {
 	// capture the node that triggered the event

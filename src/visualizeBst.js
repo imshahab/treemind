@@ -160,6 +160,11 @@ cy.on('mouseover', 'node', (evt) => {
 	tooltip.style.opacity = 1
 })
 
+// lock all nodes to prevent dragging
+cy.nodes().forEach((node) => {
+	node.lock()
+})
+
 // move tooltip with cursor
 cy.on('mousemove', (event) => {
 	tooltip.style.left = `${event.originalEvent.pageX + 15}px`
