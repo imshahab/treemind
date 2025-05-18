@@ -1,9 +1,8 @@
 // the bst node class
-class BSTNode {
+export class BSTNode {
 	constructor(task) {
 		this.title = task.title
 		this.id = task.id
-		this.priority = task.priority
 		this.deadline = task.deadline
 		this.createdAt = task.createdAt
 		this.estimatedTime = task.estimatedTime
@@ -59,15 +58,15 @@ export class BST {
 			return null
 		}
 		// if the current node's id is equal to the given id, return the current node
-		if (current.id === parseInt(id)) {
+		if (current.id === id) {
 			return current
 		}
 		// if the given id is less than the current node's id, search in the left subtree
-		if (parseInt(id) < current.id) {
-			return this.#search(current.left, parseInt(id))
+		if (id < current.id) {
+			return this.#search(current.left, id)
 		}
 		// otherwise search in the right subtree
-		return this.#search(current.right, parseInt(id))
+		return this.#search(current.right, id)
 	}
 
 	// delete a node with the given id

@@ -1,5 +1,5 @@
 // maxHeap node class
-class MaxHeapNode {
+export class MaxHeapNode {
 	constructor(task) {
 		this.title = task.title
 		this.id = task.id
@@ -235,7 +235,7 @@ export class MaxHeap {
 		let resultIndex = null
 		// iterate through the tree to find the task with the given ID
 		this.tree.forEach((node, index) => {
-			if (node.id === parseInt(id)) {
+			if (node.id === id) {
 				resultIndex = index
 				return // return the index of the task
 			}
