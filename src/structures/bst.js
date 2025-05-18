@@ -59,15 +59,15 @@ export class BST {
 			return null
 		}
 		// if the current node's id is equal to the given id, return the current node
-		if (current.id === id) {
+		if (current.id === parseInt(id)) {
 			return current
 		}
 		// if the given id is less than the current node's id, search in the left subtree
-		if (id < current.id) {
-			return this.#search(current.left, id)
+		if (parseInt(id) < current.id) {
+			return this.#search(current.left, parseInt(id))
 		}
 		// otherwise search in the right subtree
-		return this.#search(current.right, id)
+		return this.#search(current.right, parseInt(id))
 	}
 
 	// delete a node with the given id

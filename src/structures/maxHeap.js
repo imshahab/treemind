@@ -137,17 +137,23 @@ export class MaxHeap {
 	}
 
 	// remove a task by its ID
-	remove(id) {
-		// find the index of the task in the tree
+	delete(id) {
 		const index = this.search(id)
-		// if the task is not found, throw an error
-		if (!index) {
+		if (index === -1) {
 			throw new Error('Task not found')
 		}
-		// remove the task from the tree
-		this.tree.splice(index, 1)
-		// bubble down the last node
-		this.#maxHeapify(index)
+
+		// Replace the element to be removed with the last element
+		const last = this.tree.length - 1
+		if (index !== last) {
+			this.tree[index] = this.tree[last]
+		}
+
+		// Remove the last element
+		this.tree.pop()
+
+		// Restore heap property
+		this.#maxHeapify(index) // bubble down
 	}
 
 	// peek at the maximum element without removing it
@@ -226,14 +232,16 @@ export class MaxHeap {
 		if (this.tree.length === 0) {
 			return null
 		}
+		let resultIndex = null
 		// iterate through the tree to find the task with the given ID
-		this.tree.forEach((node) => {
-			if (node.id === id) {
-				return node
+		this.tree.forEach((node, index) => {
+			if (node.id === parseInt(id)) {
+				resultIndex = index
+				return // return the index of the task
 			}
 		})
 		// if the task is not found, return null
-		return null
+		return resultIndex
 	}
 
 	// sort the tree using heap sort

@@ -1,8 +1,13 @@
 import { Task } from './task.js'
-import { BST } from './data-structures/structures/bst.js'
-import { MaxHeap } from './data-structures/structures/maxHeap.js'
-import { visualize } from './data-structures/visualization/visualize.js'
-import { assignPositions } from './data-structures/visualization/assignPositions.js'
+import { BST } from './structures/bst.js'
+import { MaxHeap } from './structures/maxHeap.js'
+import { visualize } from './visualization/visualize.js'
+import { assignPositions } from './visualization/assignPositions.js'
+import { createTasksList } from './tasksList.js'
+
+// get the completed tasks from local storage
+// if non existant, create an empty array
+let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]')
 
 // sample tree setup
 const task1 = new Task(5, 'Task 5', Date.now() + 3600000, 1)
@@ -61,6 +66,9 @@ visualize(bstElements, 'bst')
 const heapElements = assignPositions(heap.buildTree()[0], 'heap')
 visualize(heapElements, 'heap')
 
+// visualize the task list using the heap
+createTasksList(heap)
+
 // remove the maximum priority element from the heap and the bst
 function obliterateMax() {
 	// get the maximum priority task from the heap
@@ -74,4 +82,35 @@ function obliterateMax() {
 	heap.extractMax()
 	// remove the maximum priority task from the bst
 	bst.delete(maxId)
+}
+
+export function removeTask(id) {
+	// remove the task from the heap
+	heap.delete(id)
+	// remove the task from the bst
+	bst.delete(id)
+	// update the visualization
+	updateVisualization()
+}
+
+export function doneTask(id) {
+	// add the task to the completed tasks array in the local storage
+	completedTasks.push(bst.search(id))
+	localStorage.setItem('completedTasks', JSON.stringify(completedTasks))
+	// remove the task from the heap
+	heap.delete(id)
+	// remove the task from the bst
+	bst.delete(id)
+	// update the visualization
+	updateVisualization()
+}
+
+function updateVisualization() {
+	// update heap and bst visualizations
+	const heapElements = assignPositions(heap.buildTree()[0], 'heap')
+	const bstElements = assignPositions(bst.root, 'bst')
+	visualize(heapElements, 'heap')
+	visualize(bstElements, 'bst')
+	// update the task list
+	createTasksList(heap)
 }
