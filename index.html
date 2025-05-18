@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<title>BST Visualization</title>
+		<title>treemind</title>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.24.0/cytoscape.min.js"></script>
 		<style>
 			#cy {
@@ -13,8 +13,14 @@
 		</style>
 	</head>
 	<body>
-		<h2>Visualization with Cytoscape.js</h2>
-		<div id="cy"></div>
+		<h2>treemind</h2>
+		<div id="bst">
+			<div id="cy"></div>
+		</div>
+
+		<div id="heap">
+			<div id="cy"></div>
+		</div>
 
 		<div
 			id="tooltip"
@@ -32,6 +38,6 @@
 			"
 		></div>
 
-		<script type="module" src="./src/visualizeHeap.js"></script>
+		<script type="module" src="./src/main.js"></script>
 	</body>
 </html>

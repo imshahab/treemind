@@ -136,6 +136,20 @@ export class MaxHeap {
 		return maxNode
 	}
 
+	// remove a task by its ID
+	remove(id) {
+		// find the index of the task in the tree
+		const index = this.search(id)
+		// if the task is not found, throw an error
+		if (!index) {
+			throw new Error('Task not found')
+		}
+		// remove the task from the tree
+		this.tree.splice(index, 1)
+		// bubble down the last node
+		this.#maxHeapify(index)
+	}
+
 	// peek at the maximum element without removing it
 	peekMax() {
 		// if the tree is empty, return null
