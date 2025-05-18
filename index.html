@@ -2,12 +2,36 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="#" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>treemind</title>
+		<title>BST Visualization</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.24.0/cytoscape.min.js"></script>
+		<style>
+			#cy {
+				width: 100%;
+				height: 600px;
+				border: 1px solid #ccc;
+			}
+		</style>
 	</head>
 	<body>
-		<div id="app"></div>
-		<script type="module" src="/src/main.js"></script>
+		<h2>Visualization with Cytoscape.js</h2>
+		<div id="cy"></div>
+
+		<div
+			id="tooltip"
+			style="
+				position: absolute;
+				padding: 8px 12px;
+				background: #222;
+				color: #fff;
+				border-radius: 8px;
+				font-size: 14px;
+				pointer-events: none;
+				opacity: 0;
+				transition: opacity 0.2s;
+				z-index: 10;
+			"
+		></div>
+
+		<script type="module" src="./src/visualizeHeap.js"></script>
 	</body>
 </html>

@@ -1,7 +1,12 @@
+// maxHeap node class
 class MaxHeapNode {
 	constructor(task) {
+		this.title = task.title
 		this.id = task.id
 		this.priority = task.priority
+		this.deadline = task.deadline
+		this.createdAt = task.createdAt
+		this.estimatedTime = task.estimatedTime
 	}
 }
 
@@ -20,6 +25,14 @@ export class MaxHeap {
 		this.#bubbleUp(this.tree.length - 1)
 	}
 
+	// private method to swap two nodes in the tree
+	#swap(index1, index2) {
+		// swap the nodes at the given indices
+		const temp = this.tree[index1]
+		this.tree[index1] = this.tree[index2]
+		this.tree[index2] = temp
+	}
+
 	// private method to bubble up the node to its correct position
 	#bubbleUp(index) {
 		// get the index of the parent node
@@ -30,11 +43,34 @@ export class MaxHeap {
 			this.tree[index].priority > this.tree[parentIndex].priority
 		) {
 			// swap the current node with its parent
-			const temp = this.tree[index]
-			this.tree[index] = this.tree[parentIndex]
-			this.tree[parentIndex] = temp
+			this.#swap(index, parentIndex)
 			// recursively bubble up the parent node
 			this.#bubbleUp(parentIndex)
+		} else if (
+			index > 0 &&
+			this.tree[index].priority === this.tree[parentIndex].priority
+		) {
+			// if the priorities are equal, check the deadlines
+			if (this.tree[index].deadline != this.tree[parentIndex].deadline) {
+				if (
+					this.tree[index].deadline < this.tree[parentIndex].deadline
+				) {
+					// swap the current node with its parent
+					this.#swap(index, parentIndex)
+					// recursively bubble up the parent node
+					this.#bubbleUp(parentIndex)
+				}
+			} else {
+				if (
+					this.tree[index].createdAt <
+					this.tree[parentIndex].createdAt
+				) {
+					// swap the current node with its parent
+					this.#swap(index, parentIndex)
+					// recursively bubble up the parent node
+					this.#bubbleUp(parentIndex)
+				}
+			}
 		}
 	}
 
@@ -218,5 +254,34 @@ export class MaxHeap {
 		if (side === 'right') {
 			return index * 2 + 2
 		}
+	}
+
+	// build an array with the left and right child properties included
+	buildTree() {
+		const array = []
+
+		// first: create all nodes
+		this.tree.forEach((node) => {
+			array.push({
+				title: node.title,
+				id: node.id,
+				priority: node.priority,
+				deadline: node.deadline,
+				createdAt: node.createdAt,
+				estimatedTime: node.estimatedTime,
+				left: null,
+				right: null,
+			})
+		})
+
+		// then: assign references
+		array.forEach((node, index) => {
+			const leftIndex = this.#getChildIndex('left', index)
+			const rightIndex = this.#getChildIndex('right', index)
+			node.left = array[leftIndex] ?? null
+			node.right = array[rightIndex] ?? null
+		})
+
+		return array
 	}
 }

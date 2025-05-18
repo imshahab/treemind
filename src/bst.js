@@ -3,6 +3,10 @@ class BSTNode {
 	constructor(task) {
 		this.title = task.title
 		this.id = task.id
+		this.priority = task.priority
+		this.deadline = task.deadline
+		this.createdAt = task.createdAt
+		this.estimatedTime = task.estimatedTime
 		this.left = null
 		this.right = null
 	}
