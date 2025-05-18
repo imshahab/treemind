@@ -1,9 +1,13 @@
-export function visualizeHeap(elements) {
+export function visualize(elements, type) {
+	// check the type
+	let elementId = type === 'bst' ? '#bst' : '#heap'
+
 	// get the tooltip element
 	const tooltip = document.getElementById('tooltip')
+
 	// create a new instance of cytoscape
 	const cy = cytoscape({
-		container: document.querySelector('#heap #cy'),
+		container: document.querySelector(`${elementId} #cy`),
 		elements,
 		style: [
 			{
@@ -47,22 +51,14 @@ export function visualizeHeap(elements) {
 		},
 	})
 
-	// lock all nodes to prevent dragging
-	cy.nodes().forEach((node) => {
-		node.lock()
-	})
-
 	// highlight path and show tooltip on hover
 	cy.on('mouseover', 'node', (evt) => {
 		// capture the node that triggered the event
 		const node = evt.target
-		// get the node's data (depth, id, title, priority, deadline, created at) for the tooltip
+		// get the node's data (depth, id, title) for the tooltip
 		const depth = node.data('depth')
 		const id = node.data('id')
 		const title = node.data('title') || `Node ${id}`
-		const priority = node.data('priority')
-		const deadline = node.data('deadline')
-		const createdAt = node.data('createdAt')
 
 		const path = []
 		let current = node
@@ -85,17 +81,40 @@ export function visualizeHeap(elements) {
 		path.forEach((el) => el.addClass('highlighted'))
 
 		// tooltip content
-		tooltip.innerHTML = `
+		if (type === 'heap') {
+			tooltip.innerHTML = `
                 <strong>${title}</strong><br/>
                 ID: ${id}<br/>
-				Priority: ${priority}<br/>
                 Depth: ${depth}<br/>
-				Deadline: ${new Date(deadline).toLocaleString()}<br/>
-				Created At: ${new Date(createdAt).toLocaleString()}<br/>
+                Priority: ${node.data('priority')}<br/>
+                Deadline: ${new Date(
+					node.data('deadline')
+				).toLocaleString()}<br/>
+                Created At: ${new Date(
+					node.data('createdAt')
+				).toLocaleString()}<br/>
             `
+		} else if (type === 'bst') {
+			tooltip.innerHTML = `
+                <strong>${title}</strong><br/>
+                ID: ${id}<br/>
+                Depth: ${depth}<br/>
+                Deadline: ${new Date(
+					node.data('deadline')
+				).toLocaleString()}<br/>
+                Created At: ${new Date(
+					node.data('createdAt')
+				).toLocaleString()}<br/>
+            `
+		}
 
 		// make tooltip visible
 		tooltip.style.opacity = 1
+	})
+
+	// lock all nodes to prevent dragging
+	cy.nodes().forEach((node) => {
+		node.lock()
 	})
 
 	// move tooltip with cursor
@@ -109,7 +128,4 @@ export function visualizeHeap(elements) {
 		cy.elements().removeClass('highlighted')
 		tooltip.style.opacity = 0
 	})
-
-	// remove node on click
-	cy.on('click', 'node', (evt) => {})
 }

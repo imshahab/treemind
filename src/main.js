@@ -1,8 +1,7 @@
 import { Task } from './task.js'
 import { BST } from './data-structures/structures/bst.js'
 import { MaxHeap } from './data-structures/structures/maxHeap.js'
-import { visualizeHeap } from './data-structures/visualization/visualizeHeap.js'
-import { visualizeBst } from './data-structures/visualization/visualizeBst.js'
+import { visualize } from './data-structures/visualization/visualize.js'
 import { assignPositions } from './data-structures/visualization/assignPositions.js'
 
 // sample tree setup
@@ -56,11 +55,11 @@ heap.insert(task12)
 
 // visualize the bst
 const bstElements = assignPositions(bst.root, 'bst')
-visualizeBst(bstElements)
+visualize(bstElements, 'bst')
 
 // visualize the heap
 const heapElements = assignPositions(heap.buildTree()[0], 'heap')
-visualizeHeap(heapElements)
+visualize(heapElements, 'heap')
 
 // remove the maximum priority element from the heap and the bst
 function obliterateMax() {
