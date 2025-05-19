@@ -1,6 +1,13 @@
 export function visualize(elements, type) {
 	// check the type
-	let elementId = type === 'bst' ? '#bst' : '#heap'
+	let elementId
+	if (type === 'heap') {
+		elementId = '#heap'
+	} else if (type === 'bst') {
+		elementId = '#bst'
+	} else if (type === 'titleBst') {
+		elementId = '#title-bst'
+	}
 
 	// get the tooltip element
 	const tooltip = document.getElementById('tooltip')
@@ -94,7 +101,7 @@ export function visualize(elements, type) {
 					node.data('createdAt')
 				).toLocaleString()}<br/>
             `
-		} else if (type === 'bst') {
+		} else if (type === 'bst' || type === 'titleBst') {
 			tooltip.innerHTML = `
                 <strong>${title}</strong><br/>
                 ID: ${id}<br/>

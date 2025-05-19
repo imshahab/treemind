@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	tasksListEl.addEventListener('click', (e) => {
 		if (e.target.classList.contains('delete-task')) {
 			const taskId = e.target.id
-			removeTask(taskId)
+			const taskTitle = e.target.title
+			removeTask(taskId, taskTitle)
 		}
 	})
 
@@ -43,7 +44,7 @@ export function createTasksList(heap) {
 	const tasksList = tasks
 		.map((task) => {
 			return `
-        <button class="delete-task" id="${task.id}">Delete</button>
+        <button class="delete-task" id="${task.id}" title="${task.title}">Delete</button>
         <li><label for=${task.id}>${task.title}</label></li>
         <input type="checkbox" id="${task.id}" />
         `

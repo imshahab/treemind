@@ -25,7 +25,12 @@ export function assignPositions(node, type) {
 		elements.push({
 			data: {
 				id: node.id.toString(),
-				label: type === 'heap' ? `${node.priority}` : `${node.id}`,
+				label:
+					type === 'heap'
+						? node.priority
+						: type === 'bst'
+						? node.id
+						: node.title,
 				priority: node.priority,
 				title: node.title,
 				createdAt: node.createdAt,

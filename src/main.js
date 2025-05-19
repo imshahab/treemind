@@ -1,5 +1,6 @@
 import { Task } from './task.js'
 import { BST } from './structures/bst.js'
+import { TitleBST } from './structures/titleBst.js'
 import { MaxHeap } from './structures/maxHeap.js'
 import { visualize } from './visualization/visualize.js'
 import { assignPositions } from './visualization/assignPositions.js'
@@ -13,15 +14,18 @@ let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]')
 // get heap and bst from local storage
 let parsedHeap = JSON.parse(localStorage.getItem('heap'))
 let parsedBst = JSON.parse(localStorage.getItem('bst'))
+let parsedTitleBst = JSON.parse(localStorage.getItem('titleBst'))
 
 // create a new heap and bst
 let heap = new MaxHeap()
 let bst = new BST()
+let titleBst = new TitleBST()
 
 // check if the heap and bst exist in local storage
 if (parsedHeap && parsedHeap) {
 	reviveStructure(parsedHeap, heap)
 	reviveStructure(parsedBst, bst)
+	reviveStructure(parsedTitleBst, titleBst)
 }
 
 // sample tree setup
@@ -70,19 +74,8 @@ if (parsedHeap && parsedHeap) {
 // heap.insert(task11)
 // heap.insert(task12)
 
-// visualize the bst
-const bstElements = assignPositions(bst.root, 'bst')
-visualize(bstElements, 'bst')
-
-// visualize the heap
-const heapElements = assignPositions(heap.buildTree()[0], 'heap')
-visualize(heapElements, 'heap')
-
-// visualize the task list using the heap
-createTasksList(heap)
-
-// visualize the done list
-createDoneList()
+// visualize everything
+updateVisualization()
 
 // remove the maximum priority element from the heap and the bst
 function obliterateMax() {
@@ -99,14 +92,17 @@ function obliterateMax() {
 	bst.delete(maxId)
 }
 
-export function removeTask(id) {
+export function removeTask(id, title) {
 	// remove the task from the heap
 	heap.delete(id)
 	// remove the task from the bst
 	bst.delete(id)
+	// remove the task from the title bst
+	titleBst.delete(title)
 	// update the local storage
 	localStorage.setItem('heap', JSON.stringify(heap.tree))
 	localStorage.setItem('bst', JSON.stringify(bst.traverse('pre')))
+	localStorage.setItem('titleBst', JSON.stringify(titleBst.traverse('pre')))
 	// update the visualization
 	updateVisualization()
 }
@@ -126,8 +122,11 @@ export function addTask(title, deadline, estimatedTime) {
 	heap.insert(task)
 	// add the task to the bst
 	bst.insert(task)
+	// add the task to the title bst
+	titleBst.insert(task)
 	// update the local storage
 	localStorage.setItem('heap', JSON.stringify(heap.tree))
+	localStorage.setItem('titleBst', JSON.stringify(titleBst.traverse('pre')))
 	localStorage.setItem('bst', JSON.stringify(bst.traverse('pre')))
 	// update the visualization
 	updateVisualization()
@@ -137,8 +136,10 @@ function updateVisualization() {
 	// update heap and bst visualizations
 	const heapElements = assignPositions(heap.buildTree()[0], 'heap')
 	const bstElements = assignPositions(bst.root, 'bst')
+	const titleBstElements = assignPositions(titleBst.root, 'titleBst')
 	visualize(heapElements, 'heap')
 	visualize(bstElements, 'bst')
+	visualize(titleBstElements, 'titleBst')
 	// update the task list
 	createTasksList(heap)
 	// update the done list
