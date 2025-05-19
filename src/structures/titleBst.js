@@ -32,7 +32,7 @@ export class TitleBST {
 
 	// private method to insert a new node in the correct position
 	#insert(current, newNode) {
-		// if the new node's id is less than the current node's id, insert it in the left subtree
+		// if the new node's title is less than the current node's title, insert it in the left subtree
 		if (newNode.title < current.title) {
 			!current.left
 				? (current.left = newNode)
@@ -46,23 +46,23 @@ export class TitleBST {
 		}
 	}
 
-	// search for a node with the given id
+	// search for a node with the given title
 	search(title, fuzzy) {
 		return this.#search(this.root, title, fuzzy)
 	}
 
-	// private method to search for a node with the given id
+	// private method to search for a node with the given title
 	#search(current, title, fuzzy = false) {
 		this.traverse('in')
 		// if the current node is null, return null
 		if (current === null) {
 			return null
 		}
-		// if the current node's id is equal to the given id, return the current node
+		// if the current node's title is equal to the given title, return the current node
 		if (current.title === title) {
 			return fuzzy ? [current, ...this.traverse('in', current)] : current
 		}
-		// if the given id is less than the current node's id, search in the left subtree
+		// if the given title is less than the current node's title, search in the left subtree
 		if (title < current.title) {
 			return this.#search(current.left, title, fuzzy)
 		}
@@ -70,67 +70,62 @@ export class TitleBST {
 		return this.#search(current.right, title, fuzzy)
 	}
 
-	// delete a node with the given id
+	// delete a node with the given title
 	delete(title) {
 		this.root = this.#delete(this.root, title)
 	}
 
-	// private method to delete a node with the given id
+	// private method to delete a node with the given title
 	#delete(node, title) {
 		// if the current node is null, return null
 		if (!node) return null
 
-		// if the given id is less than the current node's id, search in the left subtree
+		// if the given title is less than the current node's title, search in the left subtree
 		if (title < node.title) {
-			node.left = this.#delete(title.left, title)
-			// if the given id is greater than the current node's id, search in the right subtree
+			node.left = this.#delete(node.left, title)
+			// if the given title is greater than the current node's title, search in the right subtree
 		} else if (title > node.title) {
 			node.right = this.#delete(node.right, title)
 			// found the node!
 		} else {
-			if (!node.left && !node.right) return null // case 1: no children
-			if (!node.left) return node.right // case 2a: one child (right)
-			if (!node.right) return node.left // case 2b: one child (left)
+			// case 1: no children
+			if (!node.left && !node.right) return null
+			// case 2a: one child (right)
+			if (!node.left) return node.right
+			// case 2b: one child (left)
+			if (!node.right) return node.left
 
-			// case 3: two children, replace node with successor node
-			const tempRef = { node: null } // temporary reference to handle special case
-			const successor = this.#detachMin(node.right, tempRef) // detach the successor node (the minimum node in the right subtree)
-			// if the tempRef node is not null, set the right child of the current node to the tempRef node
-			if (tempRef.node) {
-				node.right = tempRef.node
-			}
-			// set the left child of the successor node to the left child of the current node
-			successor.left = node.left
-			// set the right child of the successor node to the right child of the current node
-			successor.right = node.right
+			// case 3: two children
+			// find the minimum node in the right subtree (successor)
+			let successor = this.#findMin(node.right)
 
-			return successor // return the successor node
+			// create a new node with the successor's values to avoid circular references
+			const newNode = new TitleBSTNode({
+				title: successor.title,
+				id: successor.id,
+				deadline: successor.deadline,
+				createdAt: successor.createdAt,
+				estimatedTime: successor.estimatedTime,
+			})
+
+			// recursively delete the successor from the right subtree
+			newNode.right = this.#delete(node.right, successor.title)
+			// preserve the left subtree
+			newNode.left = node.left
+
+			return newNode
 		}
 
 		return node // return the current node
 	}
 
-	// private method to detach the minimum node from the given node
-	#detachMin(node, tempRef) {
-		// go left until we find the minimum node, also keep track of the parent node
-		let parent = null
-		while (node.left) {
-			parent = node
-			node = node.left
+	// helper method to find the minimum node in a subtree
+	#findMin(node) {
+		let current = node
+		while (current && current.left) {
+			current = current.left
 		}
-
-		// if there's a parent, meaning the node is not the root, set the left child of the parent to the right child of the current node
-		if (parent) {
-			parent.left = node.right
-			// if there's no parent, meaning the node is the root, set the tempRef.node value to the right child of the current node
-			// this is because we can't manipulate the node variable from within the function, since it's a reference passed by value:(
-			// so we need to use a temporary reference to handle this special case and manipulate the tree later on, in the caller function
-		} else {
-			tempRef.node = node.right
-		}
-
-		// return the detached minimum node
-		return node
+		return current
 	}
 
 	// traverse the tree

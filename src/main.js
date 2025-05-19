@@ -99,20 +99,22 @@ export function removeTask(id, title) {
 	bst.delete(id)
 	// remove the task from the title bst
 	titleBst.delete(title)
+
 	// update the local storage
 	localStorage.setItem('heap', JSON.stringify(heap.tree))
 	localStorage.setItem('bst', JSON.stringify(bst.traverse('pre')))
 	localStorage.setItem('titleBst', JSON.stringify(titleBst.traverse('pre')))
+
 	// update the visualization
 	updateVisualization()
 }
 
-export function doneTask(id) {
+export function doneTask(id, title) {
 	// add the task to the completed tasks array in the local storage
 	completedTasks.push(bst.search(id))
 	localStorage.setItem('completedTasks', JSON.stringify(completedTasks))
 	// remove the task
-	removeTask(id)
+	removeTask(id, title)
 }
 
 export function addTask(title, deadline, estimatedTime) {

@@ -20,8 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	tasksListEl.addEventListener('change', (e) => {
 		if (e.target.type === 'checkbox') {
 			const taskId = e.target.id
+			const taskTitle = e.target.title
 			if (e.target.checked) {
-				doneTask(taskId)
+				doneTask(taskId, taskTitle)
 			}
 		}
 	})
@@ -46,7 +47,7 @@ export function createTasksList(heap) {
 			return `
         <button class="delete-task" id="${task.id}" title="${task.title}">Delete</button>
         <li><label for=${task.id}>${task.title}</label></li>
-        <input type="checkbox" id="${task.id}" />
+        <input type="checkbox" id="${task.id}" title="${task.title}" />
         `
 		})
 		.join('')
