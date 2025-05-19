@@ -45,15 +45,25 @@ export function createTasksList(heap) {
 	const tasksList = tasks
 		.map((task) => {
 			return `
-        <button class="delete-task" id="${task.id}" title="${task.title}">Delete</button>
-        <li><label for=${task.id}>${task.title}</label></li>
-        <input type="checkbox" id="${task.id}" title="${task.title}" />
+				<li>
+					<div class="flex items-center gap-2">
+						<input type="checkbox" id="${task.id}" title="${task.title}" />
+						<label class="cursor-pointer" for=${task.id}>${task.title}</label>
+					</div>
+					<button class="delete-task  bg-white text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out" id="${task.id}" title="${task.title}">🗑️</button>					
+
+
+				</li>
         `
 		})
 		.join('')
 
 	const tasksListEl = document.querySelector('#tasks-container #tasks-list')
-	tasksListEl.innerHTML = tasksList
+	if (tasksList) {
+		tasksListEl.innerHTML = tasksList
+	} else {
+		tasksListEl.innerHTML = `<p class="py-3 text-center text-gray-500">No tasks available</p>`
+	}
 }
 
 export function createDoneList() {
@@ -66,5 +76,9 @@ export function createDoneList() {
 		.join('')
 
 	const doneListEl = document.querySelector('#done-container #done-list')
-	doneListEl.innerHTML = doneList
+	if (doneList) {
+		doneListEl.innerHTML = doneList
+	} else {
+		doneListEl.innerHTML = `<p class="py-3 text-center text-gray-500">No completed tasks</p>`
+	}
 }

@@ -3,54 +3,160 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>treemind</title>
+		<script src="https://cdn.tailwindcss.com"></script>
 		<style>
 			#cy {
 				width: 100%;
 				height: 600px;
 				border: 1px solid #ccc;
 			}
+			#tasks-list li {
+				background-color: #fff;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 0.75rem;
+				margin-bottom: 0.5rem;
+				border-radius: 0.375rem;
+				box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+					0 1px 2px -1px rgba(0, 0, 0, 0.1);
+				list-style: none;
+			}
+
+			#done-list li {
+				background-color: #f8f9fa;
+				padding: 0.75rem;
+				margin-bottom: 0.5rem;
+				border-radius: 0.375rem;
+				list-style: none;
+				box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1),
+					0 1px 2px -1px rgba(0, 0, 0, 0.1);
+			}
 		</style>
 	</head>
-	<body>
-		<h2>treemind</h2>
+	<body class="bg-gray-100 p-8 font-sans">
+		<h2 class="text-3xl font-bold mb-6 text-center text-gray-700">
+			treemind
+		</h2>
 
-		<div id="search-container">
-			<input type="text" id="search-input" />
-			<ul id="search-result"></ul>
-		</div>
-
-		<div id="tasks-container">
-			<label for="task-input">Task:</label>
-			<input type="text" id="task-input" placeholder="Enter a task" />
-			<label for="task-deadline">Deadline:</label>
-			<input type="datetime-local" id="task-deadline" />
-			<label for="task-priority">Estimated Time (hours):</label>
+		<div
+			id="search-container"
+			class="mb-8 p-6 bg-white rounded-lg shadow-md"
+		>
 			<input
-				type="number"
-				min="1"
-				max="100"
-				id="task-estimated-time"
-				placeholder="e.g. 3"
-				onkeydown="return false"
+				type="text"
+				id="search-input"
+				class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+				placeholder="Search..."
 			/>
-			<button id="add-task-btn">Add</button>
-			<h3>Tasks</h3>
-			<ul id="tasks-list"></ul>
+			<ul id="search-result" class="mt-2"></ul>
 		</div>
 
-		<div id="done-container">
-			<h3>Done</h3>
-			<ul id="done-list"></ul>
+		<div
+			id="tasks-container"
+			class="mb-8 p-6 bg-white rounded-lg shadow-md"
+		>
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+				<div>
+					<label
+						for="task-input"
+						class="block text-sm font-medium text-gray-700 mb-1"
+						>Task:</label
+					>
+					<input
+						type="text"
+						id="task-input"
+						placeholder="Enter a task"
+						class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					/>
+				</div>
+				<div>
+					<label
+						for="task-deadline"
+						class="block text-sm font-medium text-gray-700 mb-1"
+						>Deadline:</label
+					>
+					<input
+						type="datetime-local"
+						id="task-deadline"
+						class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					/>
+				</div>
+				<div>
+					<label
+						for="task-estimated-time"
+						class="block text-sm font-medium text-gray-700 mb-1"
+						>Estimated Time (hours):</label
+					>
+					<input
+						type="number"
+						min="1"
+						max="100"
+						id="task-estimated-time"
+						placeholder="e.g. 3"
+						onkeydown="return false"
+						class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					/>
+				</div>
+			</div>
+			<button
+				id="add-task-btn"
+				class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out"
+			>
+				Add Task
+			</button>
+			<h3 class="text-2xl font-semibold mt-6 mb-3 text-gray-700">
+				Tasks
+			</h3>
+			<ul id="tasks-list" class="space-y-2"></ul>
 		</div>
 
-		<div id="heap">
-			<div id="cy"></div>
+		<div id="done-container" class="mb-8 p-6 bg-white rounded-lg shadow-md">
+			<h3 class="text-2xl font-semibold mb-3 text-gray-700">Done</h3>
+			<ul id="done-list" class="list-disc space-y-2 text-gray-500"></ul>
 		</div>
-		<div id="bst">
-			<div id="cy"></div>
-		</div>
-		<div id="title-bst">
-			<div id="cy"></div>
+
+		<div class="mb-8 p-6 bg-white rounded-lg shadow-md">
+			<h3 class="text-2xl font-semibold mb-3 text-gray-700">
+				Tree Views
+			</h3>
+			<div class="flex space-x-4 mb-4">
+				<button
+					id="toggle-heap-btn"
+					class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out"
+				>
+					Heap View
+				</button>
+				<button
+					id="toggle-bst-btn"
+					class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out"
+				>
+					BST View
+				</button>
+				<button
+					id="toggle-title-bst-btn"
+					class="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-150 ease-in-out"
+				>
+					Title BST View
+				</button>
+			</div>
+
+			<div id="heap" class="hidden">
+				<h4 class="text-xl font-medium mb-2 text-gray-600">
+					Heap View
+				</h4>
+				<div id="cy"></div>
+			</div>
+			<div id="bst" class="hidden mt-4">
+				<h4 class="text-xl font-medium mb-2 text-gray-600">BST View</h4>
+				<div id="cy"></div>
+			</div>
+			<div id="title-bst" class="hidden mt-4">
+				<h4 class="text-xl font-medium mb-2 text-gray-600">
+					Title BST View
+				</h4>
+				<div id="cy"></div>
+			</div>
 		</div>
 
 		<div
@@ -71,5 +177,39 @@
 
 		<script type="module" src="./src/main.js"></script>
 		<script type="module" src="./src/search.js"></script>
+		<script>
+			// toggling tree views
+			const heapDiv = document.getElementById('heap')
+			const bstDiv = document.getElementById('bst')
+			const titleBstDiv = document.getElementById('title-bst')
+
+			const heapBtn = document.getElementById('toggle-heap-btn')
+			const bstBtn = document.getElementById('toggle-bst-btn')
+			const titleBstBtn = document.getElementById('toggle-title-bst-btn')
+
+			const views = [
+				{ btn: heapBtn, div: heapDiv },
+				{ btn: bstBtn, div: bstDiv },
+				{ btn: titleBstBtn, div: titleBstDiv },
+			]
+
+			views.forEach((currentView) => {
+				currentView.btn.addEventListener('click', function () {
+					const isCurrentlyVisible =
+						!currentView.div.classList.contains('hidden')
+
+					// hide all views before deciding which one to show
+					views.forEach((viewToHide) => {
+						viewToHide.div.classList.add('hidden')
+					})
+
+					// if the clicked view was not visible before this click, show it
+					// otherwise, it was hidden by the loop above and remains hidden
+					if (!isCurrentlyVisible) {
+						currentView.div.classList.remove('hidden')
+					}
+				})
+			})
+		</script>
 	</body>
 </html>
