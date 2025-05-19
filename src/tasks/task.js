@@ -3,8 +3,8 @@ export class Task {
 		this.id = id
 		this.title = title
 		this.deadline = deadline
-		this.createdAt = createdAt
 		this.estimatedTime = estimatedTime // in hours
+		this.createdAt = createdAt
 		this.priority = this.calculatePriority() // priority score
 	}
 

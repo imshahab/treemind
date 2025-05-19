@@ -117,7 +117,7 @@ export function doneTask(id) {
 
 export function addTask(title, deadline, estimatedTime) {
 	// create a new task
-	const task = new Task(uuidv4(), title, deadline, Date.now(), estimatedTime)
+	const task = new Task(uuidv4(), title, deadline, estimatedTime)
 	// add the task to the heap
 	heap.insert(task)
 	// add the task to the bst
@@ -165,8 +165,8 @@ function reviveStructure(parsedStructure, structure) {
 			node.id,
 			node.title,
 			node.deadline,
-			node.createdAt,
-			node.estimatedTime
+			node.estimatedTime,
+			node.createdAt
 		)
 		structure.insert(task)
 	}
