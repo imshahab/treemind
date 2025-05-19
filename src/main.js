@@ -10,12 +10,22 @@ import { v4 as uuidv4 } from 'uuid'
 // if non existant, create an empty array
 let completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]')
 
-let heap
-let bst
-// if the heap and bst are not in local storage, create them
-if (!heap || !bst) {
-	bst = new BST()
-	heap = new MaxHeap()
+// get heap and bst from local storage
+let parsedHeap = JSON.parse(localStorage.getItem('heap'))
+let parsedBst = JSON.parse(localStorage.getItem('bst'))
+
+// create a new heap and bst
+let heap = new MaxHeap()
+let bst = new BST()
+
+// check if the heap and bst exist in local storage
+if (parsedHeap && parsedHeap) {
+	// check if the heap and bst are not empty
+	if (parsedHeap.tree && parsedBst.root) {
+		// if not empty, revive them
+		heap = reviveHeap(parsedHeap, heap)
+		bst = reviveBst(parsedBst.root, bst)
+	}
 }
 
 // sample tree setup
@@ -98,6 +108,9 @@ export function removeTask(id) {
 	heap.delete(id)
 	// remove the task from the bst
 	bst.delete(id)
+	// update the local storage
+	localStorage.setItem('heap', JSON.stringify(heap))
+	localStorage.setItem('bst', JSON.stringify(bst))
 	// update the visualization
 	updateVisualization()
 }
@@ -117,6 +130,9 @@ export function addTask(title, deadline, estimatedTime) {
 	heap.insert(task)
 	// add the task to the bst
 	bst.insert(task)
+	// update the local storage
+	localStorage.setItem('heap', JSON.stringify(heap))
+	localStorage.setItem('bst', JSON.stringify(bst))
 	// update the visualization
 	updateVisualization()
 }
@@ -131,4 +147,40 @@ function updateVisualization() {
 	createTasksList(heap)
 	// update the done list
 	createDoneList()
+}
+
+// revive the heap from local storage by creating a new heap and inserting the nodes
+function reviveHeap(parsedHeap, heap) {
+	if (!parsedHeap) {
+		return null
+	}
+	for (const node of parsedHeap.tree) {
+		const task = new Task(
+			node.id,
+			node.title,
+			node.deadline,
+			node.createdAt,
+			node.estimatedTime
+		)
+		heap.insert(task)
+	}
+	return heap
+}
+
+// recursively revive the bst from local storage by creating a new bst and inserting the nodes
+function reviveBst(current, bst) {
+	if (!current) {
+		return null
+	}
+	const task = new Task(
+		current.id,
+		current.title,
+		current.deadline,
+		current.createdAt,
+		current.estimatedTime
+	)
+	bst.insert(task)
+	reviveBst(current.left, bst)
+	reviveBst(current.right, bst)
+	return bst
 }

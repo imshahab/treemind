@@ -1,5 +1,5 @@
 // the bst node class
-export class BSTNode {
+class BSTNode {
 	constructor(task) {
 		this.title = task.title
 		this.id = task.id

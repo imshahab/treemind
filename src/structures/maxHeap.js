@@ -1,5 +1,5 @@
 // maxHeap node class
-export class MaxHeapNode {
+class MaxHeapNode {
 	constructor(task) {
 		this.title = task.title
 		this.id = task.id
