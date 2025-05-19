@@ -20,12 +20,8 @@ let bst = new BST()
 
 // check if the heap and bst exist in local storage
 if (parsedHeap && parsedHeap) {
-	// check if the heap and bst are not empty
-	if (parsedHeap.tree && parsedBst.root) {
-		// if not empty, revive them
-		heap = reviveHeap(parsedHeap, heap)
-		bst = reviveBst(parsedBst.root, bst)
-	}
+	reviveStructure(parsedHeap, heap)
+	reviveStructure(parsedBst, bst)
 }
 
 // sample tree setup
@@ -109,8 +105,8 @@ export function removeTask(id) {
 	// remove the task from the bst
 	bst.delete(id)
 	// update the local storage
-	localStorage.setItem('heap', JSON.stringify(heap))
-	localStorage.setItem('bst', JSON.stringify(bst))
+	localStorage.setItem('heap', JSON.stringify(heap.tree))
+	localStorage.setItem('bst', JSON.stringify(bst.traverse('pre')))
 	// update the visualization
 	updateVisualization()
 }
@@ -131,8 +127,8 @@ export function addTask(title, deadline, estimatedTime) {
 	// add the task to the bst
 	bst.insert(task)
 	// update the local storage
-	localStorage.setItem('heap', JSON.stringify(heap))
-	localStorage.setItem('bst', JSON.stringify(bst))
+	localStorage.setItem('heap', JSON.stringify(heap.tree))
+	localStorage.setItem('bst', JSON.stringify(bst.traverse('pre')))
 	// update the visualization
 	updateVisualization()
 }
@@ -149,12 +145,12 @@ function updateVisualization() {
 	createDoneList()
 }
 
-// revive the heap from local storage by creating a new heap and inserting the nodes
-function reviveHeap(parsedHeap, heap) {
-	if (!parsedHeap) {
+// revive the heap and bst from local storage
+function reviveStructure(parsedStructure, structure) {
+	if (!parsedStructure) {
 		return null
 	}
-	for (const node of parsedHeap.tree) {
+	for (const node of parsedStructure) {
 		const task = new Task(
 			node.id,
 			node.title,
@@ -162,25 +158,7 @@ function reviveHeap(parsedHeap, heap) {
 			node.createdAt,
 			node.estimatedTime
 		)
-		heap.insert(task)
+		structure.insert(task)
 	}
-	return heap
-}
-
-// recursively revive the bst from local storage by creating a new bst and inserting the nodes
-function reviveBst(current, bst) {
-	if (!current) {
-		return null
-	}
-	const task = new Task(
-		current.id,
-		current.title,
-		current.deadline,
-		current.createdAt,
-		current.estimatedTime
-	)
-	bst.insert(task)
-	reviveBst(current.left, bst)
-	reviveBst(current.right, bst)
-	return bst
+	return structure
 }
