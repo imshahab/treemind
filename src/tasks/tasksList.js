@@ -32,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		const taskTitle = taskInputEl.value.trim()
 		const deadline = new Date(taskDeadlineEl.value).getTime()
 		const estimatedTime = parseInt(taskEstimatedTimeEl.value) // in hours
-		if (taskTitle && deadline && estimatedTime) {
+		if (taskTitle && deadline && estimatedTime && estimatedTime >= 1) {
 			addTask(taskTitle, deadline, estimatedTime)
 		} else {
-			alert('Please fill in all fields')
+			alert('Please fill in all fields with valid values.')
 		}
 	})
 })
