@@ -27,10 +27,10 @@ export function assignPositions(node, type) {
 				id: node.id.toString(),
 				label:
 					type === 'heap'
-						? node.priority
+						? node.priority.toFixed(2)
 						: type === 'bst'
-						? node.id
-						: node.title,
+						? node.id.toString().slice(0, 3) + '..'
+						: node.title.toString().slice(0, 3) + '..',
 				priority: node.priority,
 				title: node.title,
 				createdAt: node.createdAt,
