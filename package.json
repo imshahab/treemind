@@ -12,7 +12,9 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.7",
     "cytoscape": "^3.32.0",
+    "tailwindcss": "^4.1.7",
     "uuid": "^11.1.0"
   }
 }
