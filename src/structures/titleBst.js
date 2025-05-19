@@ -47,26 +47,27 @@ export class TitleBST {
 	}
 
 	// search for a node with the given id
-	search(title) {
-		return this.#search(this.root, title)
+	search(title, fuzzy) {
+		return this.#search(this.root, title, fuzzy)
 	}
 
 	// private method to search for a node with the given id
-	#search(current, title) {
+	#search(current, title, fuzzy = false) {
+		this.traverse('in')
 		// if the current node is null, return null
 		if (current === null) {
 			return null
 		}
 		// if the current node's id is equal to the given id, return the current node
 		if (current.title === title) {
-			return current
+			return fuzzy ? [current, ...this.traverse('in', current)] : current
 		}
 		// if the given id is less than the current node's id, search in the left subtree
 		if (title < current.title) {
-			return this.#search(current.left, title)
+			return this.#search(current.left, title, fuzzy)
 		}
 		// otherwise search in the right subtree
-		return this.#search(current.right, title)
+		return this.#search(current.right, title, fuzzy)
 	}
 
 	// delete a node with the given id
@@ -81,9 +82,9 @@ export class TitleBST {
 
 		// if the given id is less than the current node's id, search in the left subtree
 		if (title < node.title) {
-			node.left = this.#delete(title.left, id)
+			node.left = this.#delete(title.left, title)
 			// if the given id is greater than the current node's id, search in the right subtree
-		} else if (id > node.title) {
+		} else if (title > node.title) {
 			node.right = this.#delete(node.right, title)
 			// found the node!
 		} else {
@@ -133,14 +134,14 @@ export class TitleBST {
 	}
 
 	// traverse the tree
-	traverse(type = 'pre') {
+	traverse(type = 'pre', node = this.root) {
 		const result = []
 		if (type === 'pre') {
-			this.#preOrder(this.root, result)
+			this.#preOrder(node, result)
 		} else if (type === 'in') {
-			this.#inOrder(this.root, result)
+			this.#inOrder(node, result)
 		} else if (type === 'post') {
-			this.#postOrder(this.root, result)
+			this.#postOrder(node, result)
 		} else {
 			throw new Error('Invalid traversal type')
 		}

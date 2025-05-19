@@ -1,4 +1,4 @@
-import { removeTask, doneTask, addTask } from './main.js'
+import { removeTask, doneTask, addTask } from '../main.js'
 
 document.addEventListener('DOMContentLoaded', () => {
 	const tasksListEl = document.querySelector('#tasks-container #tasks-list')

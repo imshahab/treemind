@@ -1,10 +1,10 @@
-import { Task } from './task.js'
+import { Task } from './tasks/task.js'
 import { BST } from './structures/bst.js'
 import { TitleBST } from './structures/titleBst.js'
 import { MaxHeap } from './structures/maxHeap.js'
 import { visualize } from './visualization/visualize.js'
 import { assignPositions } from './visualization/assignPositions.js'
-import { createDoneList, createTasksList } from './tasksList.js'
+import { createDoneList, createTasksList } from './tasks/tasksList.js'
 import { v4 as uuidv4 } from 'uuid'
 
 // get the completed tasks from local storage
@@ -130,6 +130,15 @@ export function addTask(title, deadline, estimatedTime) {
 	localStorage.setItem('bst', JSON.stringify(bst.traverse('pre')))
 	// update the visualization
 	updateVisualization()
+}
+
+export function searchTask(query) {
+	let result = titleBst.search(query, true)
+	if (result) {
+		result = result.slice(0, 5)
+		return [...new Set(result)]
+	}
+	return null
 }
 
 function updateVisualization() {
