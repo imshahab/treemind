@@ -12,6 +12,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "cytoscape": "^3.32.0",
     "uuid": "^11.1.0"
   }
 }

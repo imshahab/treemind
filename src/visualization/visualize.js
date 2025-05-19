@@ -1,3 +1,5 @@
+import cytoscape from 'cytoscape'
+
 export function visualize(elements, type) {
 	// check the type
 	let elementId
